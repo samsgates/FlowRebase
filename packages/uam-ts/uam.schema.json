@@ -1,0 +1,404 @@
+{
+  "$defs": {
+    "Determinism": {
+      "enum": [
+        "deterministic",
+        "probabilistic",
+        "human_accountable"
+      ],
+      "title": "Determinism",
+      "type": "string"
+    },
+    "Evidence": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source_type": {
+          "title": "Source Type",
+          "type": "string"
+        },
+        "source_ref": {
+          "title": "Source Ref",
+          "type": "string"
+        },
+        "excerpt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Excerpt"
+        },
+        "confidence": {
+          "default": 1.0,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "source_type",
+        "source_ref"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "NodeKind": {
+      "enum": [
+        "start",
+        "end",
+        "task",
+        "decision",
+        "loop",
+        "parallel",
+        "wait",
+        "timer",
+        "event",
+        "api_call",
+        "ui_action",
+        "robot_action",
+        "script",
+        "database_action",
+        "queue_action",
+        "document_action",
+        "agent_action",
+        "human_task",
+        "approval",
+        "policy_check",
+        "subprocess",
+        "compensation",
+        "rollback",
+        "exception",
+        "notification"
+      ],
+      "title": "NodeKind",
+      "type": "string"
+    },
+    "UAMEdge": {
+      "properties": {
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label"
+        },
+        "condition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Condition"
+        }
+      },
+      "required": [
+        "source",
+        "target"
+      ],
+      "title": "UAMEdge",
+      "type": "object"
+    },
+    "UAMIntent": {
+      "properties": {
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "business_outcomes": {
+          "additionalProperties": true,
+          "title": "Business Outcomes",
+          "type": "object"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "criticality": {
+          "default": "medium",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "mission_critical"
+          ],
+          "title": "Criticality",
+          "type": "string"
+        }
+      },
+      "required": [
+        "objective"
+      ],
+      "title": "UAMIntent",
+      "type": "object"
+    },
+    "UAMNode": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/NodeKind"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "determinism": {
+          "$ref": "#/$defs/Determinism",
+          "default": "deterministic"
+        },
+        "config": {
+          "additionalProperties": true,
+          "title": "Config",
+          "type": "object"
+        },
+        "application": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Application"
+        },
+        "policy_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Policy Refs",
+          "type": "array"
+        },
+        "evidence_refs": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "criticality": {
+          "default": "medium",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "mission_critical"
+          ],
+          "title": "Criticality",
+          "type": "string"
+        },
+        "estimated_cost": {
+          "default": 0,
+          "title": "Estimated Cost",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "name"
+      ],
+      "title": "UAMNode",
+      "type": "object"
+    },
+    "UAMPolicy": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "effect": {
+          "enum": [
+            "allow",
+            "deny",
+            "require_approval"
+          ],
+          "title": "Effect",
+          "type": "string"
+        },
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "when": {
+          "additionalProperties": true,
+          "title": "When",
+          "type": "object"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "effect",
+        "action"
+      ],
+      "title": "UAMPolicy",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "version": {
+      "default": "1.0.0",
+      "title": "Version",
+      "type": "string"
+    },
+    "source": {
+      "additionalProperties": true,
+      "title": "Source",
+      "type": "object"
+    },
+    "intent": {
+      "$ref": "#/$defs/UAMIntent"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/UAMNode"
+      },
+      "title": "Nodes",
+      "type": "array"
+    },
+    "edges": {
+      "items": {
+        "$ref": "#/$defs/UAMEdge"
+      },
+      "title": "Edges",
+      "type": "array"
+    },
+    "variables": {
+      "additionalProperties": true,
+      "title": "Variables",
+      "type": "object"
+    },
+    "applications": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Applications",
+      "type": "array"
+    },
+    "credentials": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Credentials",
+      "type": "array"
+    },
+    "policies": {
+      "items": {
+        "$ref": "#/$defs/UAMPolicy"
+      },
+      "title": "Policies",
+      "type": "array"
+    },
+    "evidence": {
+      "items": {
+        "$ref": "#/$defs/Evidence"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "telemetry": {
+      "additionalProperties": true,
+      "title": "Telemetry",
+      "type": "object"
+    },
+    "economics": {
+      "additionalProperties": true,
+      "title": "Economics",
+      "type": "object"
+    },
+    "extensions": {
+      "additionalProperties": true,
+      "title": "Extensions",
+      "type": "object"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "intent",
+    "nodes",
+    "edges"
+  ],
+  "title": "UAMProcess",
+  "type": "object"
+}

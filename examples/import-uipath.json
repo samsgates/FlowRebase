@@ -1,0 +1,10 @@
+{
+  "name": "Vendor Invoice Processing (UiPath sample)",
+  "source_type": "uipath",
+  "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<Activity xmlns=\"http://schemas.microsoft.com/netfx/2009/xaml/activities\" xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" xmlns:ui=\"http://schemas.uipath.com/workflow/activities\">\n  <Sequence DisplayName=\"Vendor Invoice Processing\">\n    <ui:GetOutlookMailMessages DisplayName=\"Read Invoice Mailbox\" />\n    <ui:ReadRange DisplayName=\"Read Invoice Spreadsheet\" />\n    <ui:OpenBrowser DisplayName=\"Open SAP Portal\" />\n    <ui:TypeInto DisplayName=\"Enter Vendor Number\" />\n    <If DisplayName=\"High Value Invoice\" Condition=\"[amount &gt; 5000]\" />\n    <ui:Click DisplayName=\"Submit Invoice\" />\n  </Sequence>\n</Activity>\n",
+  "metadata": {
+    "failure_rate": 0.12,
+    "annual_cost": 180000,
+    "executions_year": 18000
+  }
+}

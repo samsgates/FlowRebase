@@ -1,0 +1,175 @@
+schema_version: '1.0'
+id: uam-demo-invoice
+name: Vendor Invoice Processing
+version: 1.0.0
+source:
+  type: demo
+  platform: UiPath
+intent:
+  objective: Validate and route supplier invoices
+  business_outcomes:
+    status: processed
+  owner: Finance Operations
+  criticality: high
+nodes:
+- id: start
+  kind: start
+  name: Invoice received
+  description: null
+  determinism: deterministic
+  config: {}
+  application: null
+  policy_refs: []
+  evidence_refs: []
+  criticality: high
+  estimated_cost: 0.0
+- id: extract
+  kind: document_action
+  name: Extract invoice
+  description: null
+  determinism: probabilistic
+  config:
+    sim_latency_ms: 450
+    sim_failure_rate: 0.02
+  application: null
+  policy_refs: []
+  evidence_refs: []
+  criticality: medium
+  estimated_cost: 0.0
+- id: validate
+  kind: policy_check
+  name: Validate vendor and amount
+  description: null
+  determinism: deterministic
+  config:
+    sim_latency_ms: 80
+  application: null
+  policy_refs: []
+  evidence_refs: []
+  criticality: medium
+  estimated_cost: 0.0
+- id: decision
+  kind: decision
+  name: High value?
+  description: null
+  determinism: deterministic
+  config:
+    expression: input.amount > 5000
+  application: null
+  policy_refs: []
+  evidence_refs: []
+  criticality: medium
+  estimated_cost: 0.0
+- id: approval
+  kind: approval
+  name: Manager approval
+  description: null
+  determinism: human_accountable
+  config:
+    sim_latency_ms: 240000
+  application: null
+  policy_refs: []
+  evidence_refs: []
+  criticality: mission_critical
+  estimated_cost: 0.0
+- id: post
+  kind: api_call
+  name: Post to SAP
+  description: null
+  determinism: deterministic
+  config:
+    sim_latency_ms: 500
+    sim_failure_rate: 0.01
+    set_output:
+      status: processed
+      approved: true
+  application: SAP
+  policy_refs: []
+  evidence_refs: []
+  criticality: mission_critical
+  estimated_cost: 0.0
+- id: post-low
+  kind: api_call
+  name: Post low-value invoice to SAP
+  description: null
+  determinism: deterministic
+  config:
+    sim_latency_ms: 500
+    sim_failure_rate: 0.01
+    set_output:
+      status: processed
+      approved: true
+  application: SAP
+  policy_refs: []
+  evidence_refs: []
+  criticality: high
+  estimated_cost: 0.0
+- id: end
+  kind: end
+  name: Completed
+  description: null
+  determinism: deterministic
+  config: {}
+  application: null
+  policy_refs: []
+  evidence_refs: []
+  criticality: medium
+  estimated_cost: 0.0
+edges:
+- source: start
+  target: extract
+  label: null
+  condition: null
+- source: extract
+  target: validate
+  label: null
+  condition: null
+- source: validate
+  target: decision
+  label: null
+  condition: null
+- source: decision
+  target: approval
+  label: 'yes'
+  condition: input.amount > 5000
+- source: decision
+  target: post-low
+  label: 'no'
+  condition: input.amount <= 5000
+- source: approval
+  target: post
+  label: null
+  condition: null
+- source: post
+  target: end
+  label: null
+  condition: null
+- source: post-low
+  target: end
+  label: null
+  condition: null
+variables: {}
+applications:
+- Microsoft Outlook
+- SAP
+- Microsoft Excel
+credentials: []
+policies:
+- id: payment-approval
+  name: High-value approval
+  effect: require_approval
+  action: deploy
+  when:
+    max_payment:
+      gt: 5000
+  reason: Financial control requires approval above $5,000
+evidence:
+- id: ev-demo
+  source_type: demo-sop
+  source_ref: finance-sop#approval
+  excerpt: Invoices above $5,000 require manager approval
+  confidence: 1.0
+telemetry: {}
+economics:
+  annual_cost: 180000
+extensions: {}

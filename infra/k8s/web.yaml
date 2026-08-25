@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flowrebase-web
+  namespace: flowrebase
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: flowrebase-web }
+  template:
+    metadata:
+      labels: { app: flowrebase-web }
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/your-org/flowrebase-web:latest
+          ports: [{ containerPort: 3000 }]
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits: { cpu: "1", memory: "1Gi" }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flowrebase-web
+  namespace: flowrebase
+spec:
+  selector: { app: flowrebase-web }
+  ports: [{ port: 80, targetPort: 3000 }]

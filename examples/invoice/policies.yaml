@@ -1,0 +1,9 @@
+policies:
+  - id: high-value-approval
+    name: High-value invoice approval
+    effect: require_approval
+    action: deploy
+    when:
+      max_payment:
+        gt: 5000
+    reason: Finance policy requires approval above $5,000.

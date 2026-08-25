@@ -1,0 +1,14 @@
+[
+  {
+    "name": "low-value invoice",
+    "input": {"invoice_id": "INV-100", "amount": 2100},
+    "expected": {"status": "processed", "approved": true},
+    "critical_paths": ["status", "approved"]
+  },
+  {
+    "name": "high-value invoice",
+    "input": {"invoice_id": "INV-101", "amount": 12500},
+    "expected": {"status": "processed", "approved": true},
+    "critical_paths": ["status", "approved"]
+  }
+]

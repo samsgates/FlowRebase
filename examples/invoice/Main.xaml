@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Activity xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ui="http://schemas.uipath.com/workflow/activities">
+  <Sequence DisplayName="Vendor Invoice Processing">
+    <ui:GetOutlookMailMessages DisplayName="Read Invoice Mailbox" />
+    <ui:ReadRange DisplayName="Read Invoice Spreadsheet" />
+    <ui:OpenBrowser DisplayName="Open SAP Portal" />
+    <ui:TypeInto DisplayName="Enter Vendor Number" />
+    <If DisplayName="High Value Invoice" Condition="[amount &gt; 5000]" />
+    <ui:Click DisplayName="Submit Invoice" />
+  </Sequence>
+</Activity>
