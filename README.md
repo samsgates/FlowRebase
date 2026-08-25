@@ -4,7 +4,11 @@
 
 FlowRebase is an open-core, vendor-neutral **Automation Modernization Control Plane**. It discovers automation assets, reconstructs process intent, normalizes them into the Universal Automation Model (UAM), recommends the right modernization strategy, compiles portable target artifacts, verifies behavior with ProofRun, and supports safe rollout and continuous control.
 
+![How It Works](media_resources/howitsworks.png)
+
 ## What is included
+
+![Key Features](media_resources/features.png)
 
 - FastAPI control plane with RBAC-ready authentication, REST APIs, persistence, audit-friendly entities and OpenAPI docs.
 - Universal Automation Model (UAM) with versionable process semantics, evidence, policies and runtime metadata.
@@ -20,6 +24,8 @@ FlowRebase is an open-core, vendor-neutral **Automation Modernization Control Pl
 - UAM TypeScript package, Python SDK, examples, tests and CI.
 
 ## Architecture
+
+![Architecture Diagram](media_resources/architecture_diagram.png)
 
 ```text
 Sources                         FlowRebase                              Targets
